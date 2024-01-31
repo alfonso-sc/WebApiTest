@@ -20,13 +20,13 @@ namespace WebApiTest.Controllers
             userService = _userService;
         }
 
-        [HttpGet("List")]
-        public ActionResult<List<User>> List()
+        [HttpGet()]
+        public ActionResult<List<User>> List(int page = 1, int pageCount = 20)
         {
-            return Ok(userService.getAllUsers());
+            return Ok(userService.getAllUsers(page, pageCount));
         }
 
-        [HttpGet("ById")]
+        [HttpGet("{Id}")]
         public ActionResult<User> ById(int Id)
         {
             return Ok(userService.getUserById(Id));
@@ -38,19 +38,19 @@ namespace WebApiTest.Controllers
             return Ok(userService.getUserByEmailAddress(emailAddress));
         }
 
-        [HttpPost("Add")]
+        [HttpPost()]
         public ActionResult<User> AddBook(UserDto userToAdd)
         {
             return Ok(userService.addUser(userToAdd));
         }
 
-        [HttpDelete("Delete")]
+        [HttpDelete()]
         public ActionResult<bool> Delete(DeleteUserRequestDto userToDelete)
         {
             return Ok(userService.deleteUser(userToDelete));
         }
 
-        [HttpPut("UpdateUser")]
+        [HttpPut()]
         public ActionResult<User> Update(UserDto userToUpdate)
         {
             return Ok(userService.updateUser(userToUpdate));

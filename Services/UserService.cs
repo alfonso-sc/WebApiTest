@@ -17,12 +17,16 @@ namespace WebApiTest.Services
             billingTimeContext = _billingTimeContext;
         }
 
-        public List<User> getAllUsers()
+        public List<User> getAllUsers(int page, int pageCount)
         {
+            int skip = (page - 1) * pageCount;
             return billingTimeContext
                 .Users
+                .Skip(skip)
+                .Take(pageCount)
                 .Include((u) => u.Roles)
                 .Include((u) => u.Projects)
+                .OrderBy((u) => u.Id)
                 .ToList();
         }
 
