@@ -16,7 +16,7 @@ namespace WebApiTest.Services
         public UserService(
             BillingTimeContext _billingTimeContext,
             IConfiguration _configuration
-            )
+        )
         {
             billingTimeContext = _billingTimeContext;
             configuration = _configuration;

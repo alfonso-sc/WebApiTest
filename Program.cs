@@ -16,6 +16,7 @@ builder.Services.AddSingleton<MusicService>();
 builder.Services.AddSingleton<VideoGameService>();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<ProjectService>();
+builder.Services.AddScoped<AuthService>();
 
 builder.Services.AddEntityFrameworkNpgsql().AddDbContext<BillingTimeContext>(opt => opt.UseNpgsql(builder.Configuration.GetConnectionString("database")));
 

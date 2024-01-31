@@ -34,3 +34,7 @@ GET {{WebApiTest_HostAddress}}/User
 Content-Type: application/json
 Authorization: Bearer {{login.response.body.token}}
 
+###
+
+GET {{WebApiTest_HostAddress}}/Auth/LogIn
+Content-Type: application/json
