@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebApiTest.EntityModels;
@@ -10,6 +11,7 @@ using WebApiTest.Services;
 
 namespace WebApiTest.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class UserController : ControllerBase
@@ -59,6 +61,13 @@ namespace WebApiTest.Controllers
         public ActionResult<User> Update(UserDto userToUpdate)
         {
             return Ok(userService.updateUser(userToUpdate));
+        }
+
+        [AllowAnonymous]
+        [HttpPost("LogIn")]
+        public ActionResult LogIn()
+        {
+            return Ok(new { token = userService.GetToken() });
         }
     }
 }

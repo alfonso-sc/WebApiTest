@@ -1,4 +1,8 @@
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using WebApiTest.EntityModels;
 using WebApiTest.Models.DTO;
 
@@ -7,10 +11,15 @@ namespace WebApiTest.Services
     public class UserService
     {
         private BillingTimeContext billingTimeContext;
+        private IConfiguration configuration;
 
-        public UserService(BillingTimeContext _billingTimeContext)
+        public UserService(
+            BillingTimeContext _billingTimeContext,
+            IConfiguration _configuration
+            )
         {
             billingTimeContext = _billingTimeContext;
+            configuration = _configuration;
         }
 
         public List<User> getAllUsers(int page, int pageCount, string orderBy, bool ascending)
@@ -132,6 +141,31 @@ namespace WebApiTest.Services
             billingTimeContext.Update(updatedDbUser);
             billingTimeContext.SaveChanges();
             return updatedDbUser;
+        }
+
+        public string GetToken()
+        {
+            var authClaims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Name, "Username@user.com"),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim(JwtRegisteredClaimNames.Sub, "Username")
+            };
+
+            authClaims.Add(new Claim(ClaimTypes.Role, "Admin"));
+
+
+            var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Secret"]!));
+
+            var token = new JwtSecurityToken(
+                issuer: configuration["JWT:ValidIssuer"],
+                audience: configuration["JWT:ValidAudience"],
+                expires: DateTime.Now.AddMinutes(5),
+                claims: authClaims,
+                signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
+            );
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
     }

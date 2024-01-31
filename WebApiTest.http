@@ -23,4 +23,14 @@ Content-Type: application/json
     "currentRanking": 100
   }
 
-  ###
+###
+# @name login
+POST {{WebApiTest_HostAddress}}/User/LogIn
+Content-Type: application/json
+
+###
+
+GET {{WebApiTest_HostAddress}}/User
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
