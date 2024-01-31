@@ -21,9 +21,14 @@ namespace WebApiTest.Controllers
         }
 
         [HttpGet()]
-        public ActionResult<List<User>> List(int page = 1, int pageCount = 20)
+        public ActionResult<List<User>> List(
+            string? orderBy,
+            int page = 1,
+            int pageCount = 20,
+            bool ascending = true
+        )
         {
-            return Ok(userService.getAllUsers(page, pageCount));
+            return Ok(userService.getAllUsers(page, pageCount, orderBy, ascending));
         }
 
         [HttpGet("{Id}")]

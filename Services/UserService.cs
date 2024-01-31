@@ -17,16 +17,43 @@ namespace WebApiTest.Services
             billingTimeContext = _billingTimeContext;
         }
 
-        public List<User> getAllUsers(int page, int pageCount)
+        public List<User> getAllUsers(int page, int pageCount, string? orderBy, bool ascending)
         {
             int skip = (page - 1) * pageCount;
-            return billingTimeContext
+
+            var query = billingTimeContext
                 .Users
-                .Skip(skip)
-                .Take(pageCount)
                 .Include((u) => u.Roles)
                 .Include((u) => u.Projects)
-                .OrderBy((u) => u.Id)
+                .AsQueryable();
+
+            switch (orderBy)
+            {
+                case "name":
+                    query =
+                        ascending ?
+                            query.OrderBy((u) => u.Name) :
+                            query.OrderByDescending((u) => u.Name);
+                    break;
+                case "email":
+                    query =
+                        ascending ?
+                        query.OrderBy((u) => u.Email) :
+                        query.OrderByDescending((u) => u.Email);
+                    break;
+                case "id":
+                default:
+                    query =
+                        ascending ?
+                        query.OrderBy((u) => u.Id) :
+                        query.OrderByDescending((u) => u.Id);
+                    break;
+
+            }
+
+            return query
+                .Skip(skip)
+                .Take(pageCount)
                 .ToList();
         }
 
