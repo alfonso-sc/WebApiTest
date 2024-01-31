@@ -1,0 +1,26 @@
+@WebApiTest_HostAddress = http://localhost:5261
+
+GET {{WebApiTest_HostAddress}}/MyController/weatherforecast/
+Accept: application/json
+###
+
+GET {{WebApiTest_HostAddress}}/Book/GetAllBooks
+Accept: application/json
+###
+
+
+POST {{WebApiTest_HostAddress}}/Book/AddBook
+Content-Type: application/json
+
+
+ {
+    "id": 100,
+    "title": "TEST TITLE",
+    "author": "TEST AUTHOR",
+    "genre": "TEST GENRE",
+    "pageCount": 100,
+    "releaseDate": "1960-07-11",
+    "currentRanking": 100
+  }
+
+  ###
