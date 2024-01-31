@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using WebApiTest.EntityModels;
 using WebApiTest.Models.DTO;
@@ -17,7 +13,7 @@ namespace WebApiTest.Services
             billingTimeContext = _billingTimeContext;
         }
 
-        public List<User> getAllUsers(int page, int pageCount, string? orderBy, bool ascending)
+        public List<User> getAllUsers(int page, int pageCount, string orderBy, bool ascending)
         {
             int skip = (page - 1) * pageCount;
 

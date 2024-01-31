@@ -22,7 +22,7 @@ namespace WebApiTest.Controllers
 
         [HttpGet()]
         public ActionResult<List<User>> List(
-            string? orderBy,
+            string orderBy = "id",
             int page = 1,
             int pageCount = 20,
             bool ascending = true
@@ -44,7 +44,7 @@ namespace WebApiTest.Controllers
         }
 
         [HttpPost()]
-        public ActionResult<User> AddBook(UserDto userToAdd)
+        public ActionResult<User> AddUser(UserDto userToAdd)
         {
             return Ok(userService.addUser(userToAdd));
         }

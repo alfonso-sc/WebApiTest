@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebApiTest.EntityModels;
+using WebApiTest.Models.DTO;
+using WebApiTest.Services;
 
 namespace WebApiTest.Controllers
 {
@@ -12,21 +14,55 @@ namespace WebApiTest.Controllers
     [Route("[controller]")]
     public class ProjectController : ControllerBase
     {
-        private BillingTimeContext billingTimeContext;
-        public ProjectController(BillingTimeContext _billingTimeContext)
+
+        private ProjectService projectService;
+
+        public ProjectController(ProjectService _projectService)
         {
-            billingTimeContext = _billingTimeContext;
+            projectService = _projectService;
         }
 
-        [HttpGet("List")]
-        public ActionResult List()
+        [HttpGet()]
+        public ActionResult<List<Project>> List(
+            string orderBy = "id",
+            int page = 1,
+            int pageCount = 20,
+            bool ascending = true
+        )
         {
-            return Ok(
-                billingTimeContext
-                .Projects
-                .Include(p => p.Company)
-                .Include(p => p.Entries)
-            );
+            return Ok(projectService.getAllProjects(page, pageCount, orderBy, ascending));
         }
+
+        [HttpGet("{Id}")]
+        public ActionResult<Project> ById(int Id)
+        {
+            return Ok(projectService.getProjectById(Id));
+        }
+
+        [HttpGet("Name")]
+        public ActionResult<Project> ByName(string Name)
+        {
+            return Ok(projectService.getProjectByName(Name));
+        }
+
+        [HttpPost()]
+        public ActionResult<User> AddProject(ProjectDto projectToAdd)
+        {
+            return Ok(projectService.addProject(projectToAdd));
+        }
+
+        [HttpDelete()]
+        public ActionResult<bool> Delete(DeleteProjectRequestDto projectToDelete)
+        {
+            return Ok(projectService.deleteProject(projectToDelete));
+        }
+
+        [HttpPut()]
+        public ActionResult<User> Update(ProjectDto projectToUpdate)
+        {
+            return Ok(projectService.updateProject(projectToUpdate));
+        }
+
+
     }
 }
